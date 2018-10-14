@@ -9,6 +9,6 @@ h1{font-size:120pt; text-align:right; color:#fafafa; margin:-50px 0px -120px 0px
 <body>
 <h1>Index</h1>
 <p><?php echo $msg; ?></p>
-<p><?php echo date("Y年n月j日"); ?></p>
+<p>ID=<?php echo $id; ?></p>
 </body>
 </html>
