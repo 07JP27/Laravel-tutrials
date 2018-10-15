@@ -75,7 +75,8 @@ class HelloController extends Controller
 
     public function show(Request $request)
     {
-        $items = Db::table('people')->orderBy('age','asc')->get();
+        $page=$request->page;
+        $items = Db::table('people')->offset($page *3)->limit(3)->get();
         return view('hello.show',['items'=>$items]);
     }
 }
