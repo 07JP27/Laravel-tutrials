@@ -3,32 +3,45 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\User;
+use App\Person;
 
 class HelloTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testHello()
-    {
-        $this->assertTrue(true);
+    use DatabaseMigrations;
 
-        $response = $this->get('/');
-        $response->assertStatus(200);
+   public function testHello()
+   {
+       // ダミーで利用するデータ
+       factory(User::class)->create([
+           'name' => 'AAA',
+           'email' => 'BBB@CCC.COM',
+           'password' => 'ABCABC',
+       ]);
+       factory(User::class, 10)->create();
 
-        $response = $this->get('/hello');
-        $response->assertStatus(302);
+       $this->assertDatabaseHas('users', [
+           'name' => 'AAA',
+           'email' => 'BBB@CCC.COM',
+           'password' => 'ABCABC',
+       ]);
 
-        $user = factory(User::class)->create();
-        $response = $this->actingAs($user)->get('/hello');
-        $response->assertStatus(200);
+       // ダミーで利用するデータ
+       factory(Person::class)->create([
+           'name' => 'XXX',
+           'mail' => 'YYY@ZZZ.COM',
+           'age' => 123,
+       ]);
+       factory(Person::class, 10)->create();
 
-        $response = $this->get('/no_route');
-        $response->assertStatus(404);
-    }
+       $this->assertDatabaseHas('people', [
+           'name' => 'XXX',
+           'mail' => 'YYY@ZZZ.COM',
+           'age' => 123,
+       ]);
+
+   }
 }
